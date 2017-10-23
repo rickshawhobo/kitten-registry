@@ -1,0 +1,19 @@
+version: "2"
+services:
+  api:
+    container_name: api
+    image: "rickshawhobo/php-fpm-nginx"
+    volumes:
+      - ".:/var/www/"
+      - "./public:/var/www/html"
+    ports:
+      - "7177:80"
+  mysql:
+      container_name: mysql
+      image: mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: dbname
+      ports:
+        - "3306:3306"
+
