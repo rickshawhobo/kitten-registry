@@ -20,7 +20,7 @@ class Kitten extends Model
     {
 
         $maxAge = $maxAge ?? $minAge;
-        return $query->where('dob', '>', Carbon::now()->subYear($minAge + 1))->where('dob', '<', Carbon::now()->subYear($maxAge));
+        return $query->where('dob', '>', Carbon::now()->subYear($maxAge + 1))->where('dob', '<', Carbon::now()->subYear($minAge));
     }
 
     /**

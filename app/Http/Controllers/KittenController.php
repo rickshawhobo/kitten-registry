@@ -18,6 +18,13 @@ class KittenController extends Controller
         if (isset($filters['firstName'])) {
             $query->firstNameLike($filters['firstName']);
         }
+        if (isset($filters['lastName'])) {
+            $query->lastNameLike($filters['lastName']);
+        }
+        echo $query->toSql();
+        print_r($query->getBindings());
+        exit;
+
         return $query->paginate(10);
     }
 }
