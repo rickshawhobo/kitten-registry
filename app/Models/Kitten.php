@@ -8,6 +8,15 @@ class Kitten extends Model
 {
 
     /**
+     * Date mutate the dob field
+     * @return array
+     */
+    public function getDates()
+    {
+        return ['created_at', 'updated_at', 'dob'];
+    }
+
+    /**
      * Given an age range, find date of birth with that date range
      * If no max age is given then the range is 1 year
      *
@@ -20,6 +29,10 @@ class Kitten extends Model
     {
 
         $maxAge = $maxAge ?? $minAge;
+
+        if ($maxAge < $minAge) {
+            throw new Exception("Max age cannot be less than min age in search criteria");
+        }
         return $query->where('dob', '>', Carbon::now()->subYear($maxAge + 1))->where('dob', '<', Carbon::now()->subYear($minAge));
     }
 
