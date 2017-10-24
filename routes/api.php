@@ -18,4 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/kittens', 'KittenController@index');
+Route::group(['middleware' => ['cacheable']], function () {
+    Route::resource('kittens', 'KittenController');
+
+
+});
+
+
