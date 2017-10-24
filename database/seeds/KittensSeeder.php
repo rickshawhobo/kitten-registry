@@ -13,7 +13,7 @@ class KittensSeeder extends Seeder
     public function run()
     {
         $k = 0;
-        while ($k < 100) {
+        while ($k < 1000) {
             factory(Kitten::class, 10000)->create();
             ++$k;
         }

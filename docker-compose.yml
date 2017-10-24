@@ -1,8 +1,8 @@
 version: "2"
 services:
   api:
+    build: .
     container_name: api
-    image: "rickshawhobo/php-fpm-nginx"
     volumes:
       - ".:/var/www/"
       - "./public:/var/www/html"
@@ -16,4 +16,7 @@ services:
         MYSQL_DATABASE: dbname
       ports:
         - "3306:3306"
-
+      volumes:
+        - mysqldata:/var/lib/mysql
+volumes:
+  mysqldata:

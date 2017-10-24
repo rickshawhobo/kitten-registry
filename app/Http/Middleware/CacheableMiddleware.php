@@ -9,7 +9,7 @@ class CacheableMiddleware
 
     /**
      * A trivial middleware that just returns the Cache-Control header
-     * 
+     *
      * @param $request
      * @param Closure $next
      * @return mixed
