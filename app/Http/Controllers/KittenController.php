@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Exceptions\ValidationException;
 use App\Models\Kitten;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -21,6 +22,7 @@ class KittenController extends Controller
         'gender',
         'id',
         'lastName',
+        'maxAge'
     ];
 
 
@@ -36,13 +38,12 @@ class KittenController extends Controller
      */
     public function index(Request $request)
     {
-
         $minutes = 10;
 
-        $filters = $request->input('filters');
-        foreach ($request->input('filters') as $filter => $value) {
+        $filters = $request->input('filters') ?? [];
+        foreach ($filters as $filter => $value) {
             if (!in_array($filter, $this->validFilters)) {
-                throw new \Exception("Invalid filter detected $filter");
+                throw new ValidationException("Invalid filter detected $filter");
             }
         }
         ksort($filters);
@@ -58,7 +59,14 @@ class KittenController extends Controller
 
 
             if (isset($filters['age'])) {
-                $query->age($filters['age'], $filters['maxAge'] ?? null);
+                if ($filters['age'] < 0) {
+                    throw new ValidationException("Age cannot be negative");
+                }
+                $maxAge = $filters['maxAge'] ?? $filters['age'];
+                if ($maxAge < $filters['age']) {
+                    throw new ValidationException("Max age cannot be less than age");
+                }
+                $query->age($filters['age'], $maxAge);
 
             }
             if (isset($filters['firstName'])) {

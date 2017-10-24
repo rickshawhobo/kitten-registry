@@ -25,14 +25,9 @@ class Kitten extends Model
      * @param null $maxAge
      * @return mixed
      */
-    public function scopeAge($query, $minAge, $maxAge = null)
+    public function scopeAge($query, $minAge, $maxAge)
     {
 
-        $maxAge = $maxAge ?? $minAge;
-
-        if ($maxAge < $minAge) {
-            throw new Exception("Max age cannot be less than min age in search criteria");
-        }
         return $query->where('dob', '>', Carbon::now()->subYear($maxAge + 1))->where('dob', '<', Carbon::now()->subYear($minAge));
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\Exceptions\ValidationException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -48,6 +49,19 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        if ($exception instanceof ValidationException) {
+            $error = [
+                'error' => $exception->getMessage()
+            ];
+            return response()->json($error, 400);
+        }
+
+        else {
+            $error = [
+                'error' => "Unknown error " . $exception->getMessage()
+            ];
+            return response()->json($error, 500);
+
+        }
     }
 }
