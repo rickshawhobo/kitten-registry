@@ -6,6 +6,7 @@ use App\Http\Controllers\Exceptions\ValidationException;
 use App\Models\Kitten;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 /**
  * Class KittenController
@@ -38,6 +39,12 @@ class KittenController extends Controller
      */
     public function index(Request $request)
     {
+        $stress = $request->input('stress');
+
+        if ($stress == 1) {
+            Config::set('database.connections.mysql.database', 'dbname');
+        }
+
         $minutes = 10;
 
         $filters = $request->input('filters') ?? [];
