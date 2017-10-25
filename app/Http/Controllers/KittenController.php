@@ -39,11 +39,7 @@ class KittenController extends Controller
      */
     public function index(Request $request)
     {
-        $stress = $request->input('stress');
-
-        if ($stress == 1) {
-            Config::set('database.connections.mysql.database', 'dbname');
-        }
+        $stress = $request->input('stress') ?? 0;
 
         $minutes = 10;
 
@@ -56,8 +52,12 @@ class KittenController extends Controller
         ksort($filters);
 
         // build the cache key out of the valid filters, page and per page numbers so the cache is consistent with the payload
-        $key = "kittens?" . http_build_query($filters) . $request->input('page') . $request->input('perPage');
+        $key = "kittens?" . http_build_query($filters) . $request->input('page') . $request->input('perPage') . $stress;
         $perPage = $request->input('perPage') ?? 100;
+
+        if ($stress == 1) {
+            Config::set('database.connections.mysql.database', 'dbname');
+        }
 
         $return = Cache::remember($key, $minutes, function () use ($request, $filters, $perPage) {
 
